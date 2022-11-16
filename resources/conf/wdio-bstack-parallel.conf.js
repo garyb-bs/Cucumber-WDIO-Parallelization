@@ -1,0 +1,30 @@
+const defaults = require("./wdio.conf.js")
+const _ = require("lodash")
+const timeStamp = new Date().getTime()
+
+const overrides = {
+    user: process.env.BROWSERSTACK_USERNAME || 'BROWSERSTACK_USERNAME',
+    key: process.env.BROWSERSTACK_ACCESS_KEY || 'BROWSERSTACK_ACCESS_KEY',
+    specs: [
+        './resources/features/tmp/*.feature'
+    ],
+    maxInstances: 16,
+    capabilities: [{
+        'bstack:options': {
+            'projectName': 'BrowserStack',
+            'buildName': process.env.BROWSERSTACK_BUILD_NAME || 'browserstack-examples-webdriverio - ' + timeStamp,
+            'debug': true,
+            'networkLogs': true,
+            'video': true,
+            'maskCommands': 'setValues, getValues, setCookies, getCookies',
+            'os': 'Windows',
+            'osVersion': '10'
+        },
+        browserName: 'Chrome',
+        browserVersion: 'latest',
+        acceptInsecureCerts: true
+    }],
+    baseUrl: 'https://bstackdemo.com/'
+}
+
+exports.config = _.defaultsDeep(overrides, defaults.config)
